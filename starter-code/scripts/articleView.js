@@ -20,10 +20,9 @@ articleView.populateFilters = function() {
 articleView.handleAuthorFilter = function() {
   $('#author-filter').on('change', function() {
     if ($(this).val()) {
-      console.log(($(this).val()));
       $('article').hide();
       $('article[data-author = "' + $(this).val() + '"]').fadeIn();
-      /* TODO: If the slect box changes to an option that has a value, we should:
+      /* DONE: If the slect box changes to an option that has a value, we should:
           1. Hide all of the articles
           2. Fade in only the articles that match based on on the author
             that was aselected. Hint: use an attribute selector to find
@@ -40,9 +39,18 @@ articleView.handleAuthorFilter = function() {
 };
 
 articleView.handleCategoryFilter = function() {
-  /* TODO: Just like we do for #author-filter above, we should also handle
-  change events on the #category-filter element. Be sure to reset the
-  #author-filter while you're at it! */
+  $('#category-filter').on('change', function() {
+    if ($(this).val()) {
+      $('article').hide();
+      $('article[data-category = "' + $(this).val() + '"]').fadeIn();
+    } else {
+      $('article').fadeIn();
+      $('article.template').hide();
+    /* Otherwise, we should:
+        1. Show all the articles except the template */
+    }
+    $('#author-filter').val('');
+  });
 };
 
 articleView.handleMainNav = function () {
@@ -69,7 +77,7 @@ articleView.setTeasers = function() {
 };
 $(document).ready (function() {
   articleView.populateFilters();
-  articleView.handleAuthorFilter();
+  articleView.handleCategoryFilter();
   articleView.handleAuthorFilter();
 });
 // TODO: Invoke all of the above functions (I mean, methods!):
