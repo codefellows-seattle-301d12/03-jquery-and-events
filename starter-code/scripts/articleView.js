@@ -13,12 +13,16 @@ articleView.populateFilters = function() {
     if ($('#category-filter option[value="' + category + '"]').length === 0) {
       $('#category-filter').append(optionTag);
     }
+
   });
 };
 
 articleView.handleAuthorFilter = function() {
   $('#author-filter').on('change', function() {
     if ($(this).val()) {
+      console.log(($(this).val()));
+      $('article').hide();
+      $('article[data-author = "' + $(this).val() + '"]').fadeIn();
       /* TODO: If the slect box changes to an option that has a value, we should:
           1. Hide all of the articles
           2. Fade in only the articles that match based on on the author
@@ -26,6 +30,8 @@ articleView.handleAuthorFilter = function() {
             those articles that match the value, and then fade them in.
         */
     } else {
+      $('article').fadeIn();
+      $('article.template').hide();
     /* Otherwise, we should:
         1. Show all the articles except the template */
     }
@@ -61,5 +67,9 @@ articleView.setTeasers = function() {
     // STRETCH GOAl!: change the 'Read On' link to 'Show Less'
   */
 };
-
+$(document).ready (function() {
+  articleView.populateFilters();
+  articleView.handleAuthorFilter();
+  articleView.handleAuthorFilter();
+});
 // TODO: Invoke all of the above functions (I mean, methods!):
