@@ -30,7 +30,7 @@ articleView.handleAuthorFilter = function() {
     } else {
     /* Otherwise, we should:
         1. Show all the articles except the template */
-      $('article').not('.template').show();
+      $('article').not('.template').fadeIn();
     }
     $('#category-filter').val('');
   });
@@ -40,6 +40,16 @@ articleView.handleCategoryFilter = function() {
   /* TODO: Just like we do for #author-filter above, we should also handle
   change events on the #category-filter element. Be sure to reset the
   #author-filter while you're at it! */
+  $('#category-filter').on('change', function() {
+    if ($(this).val()) {
+      $('article').hide();
+      $('article[data-category|="'+$(this).val()+'"]').fadeIn();
+    }
+    else {
+      $('article').not('.template').fadeIn();
+    }
+    $('#author-filter').val('');
+  });
 };
 
 articleView.handleMainNav = function () {
@@ -49,6 +59,9 @@ articleView.handleMainNav = function () {
       2. Fade in the single .tab-content section that is
         associated with the .tab element's data-content attribute.
     */
+    console.log(this);
+    $('.tab-content').hide();
+    $('#' + $(this).attr('data-content')).fadeIn();
   });
   $('.main-nav .tab:first').click();
 };
@@ -63,6 +76,11 @@ articleView.setTeasers = function() {
 
     // STRETCH GOAl!: change the 'Read On' link to 'Show Less'
   */
+  $('article').on('click', '.read-on', function (event) {
+    event.preventDefault();
+    $(this).parent().find('.article-body').children().fadeIn();
+    $(this).hide();
+  });
 };
 
 // DONE: Invoke all of the above functions (I mean, methods!):
