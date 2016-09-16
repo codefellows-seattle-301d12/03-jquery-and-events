@@ -13,19 +13,25 @@ articleView.populateFilters = function() {
     if ($('#category-filter option[value="' + category + '"]').length === 0) {
       $('#category-filter').append(optionTag);
     }
+
   });
 };
 
 articleView.handleAuthorFilter = function() {
   $('#author-filter').on('change', function() {
     if ($(this).val()) {
-      /* TODO: If the slect box changes to an option that has a value, we should:
+      $('article').hide();
+      $('article[data-author = "' + $(this).val() + '"]').fadeIn();
+      /* DONE: If the slect box changes to an option that has a value, we should:
+      /* If the slect box changes to an option that has a value, we should:
           1. Hide all of the articles
           2. Fade in only the articles that match based on on the author
             that was aselected. Hint: use an attribute selector to find
             those articles that match the value, and then fade them in.
         */
     } else {
+      $('article').fadeIn();
+      $('article.template').hide();
     /* Otherwise, we should:
         1. Show all the articles except the template */
     }
@@ -34,25 +40,40 @@ articleView.handleAuthorFilter = function() {
 };
 
 articleView.handleCategoryFilter = function() {
-  /* TODO: Just like we do for #author-filter above, we should also handle
+  $('#category-filter').on('change', function() {
+    if ($(this).val()) {
+      $('article').hide();
+      $('article[data-category = "' + $(this).val() + '"]').fadeIn();
+    } else {
+      $('article').fadeIn();
+      $('article.template').hide();
+    /* Otherwise, we should:
+        1. Show all the articles except the template */
+    }
+    $('#author-filter').val('');
+  });
+  /* Just like we do for #author-filter above, we should also handle
   change events on the #category-filter element. Be sure to reset the
   #author-filter while you're at it! */
 };
 
 articleView.handleMainNav = function () {
   $('.main-nav').on('click', '.tab', function() {
-    /* TODO:
+    /*
       1. Hide all of the .tab-content sections
       2. Fade in the single .tab-content section that is
         associated with the .tab element's data-content attribute.
     */
+    event.preventDefault();
+    $('.tab-content').hide();
+    $('#' + $(this).data('content')).fadeIn();
   });
   $('.main-nav .tab:first').click();
 };
 
 articleView.setTeasers = function() {
   $('.article-body *:nth-of-type(n+2)').hide();
-  /* TODO: Add a delegated event handler to reveal the remaining paragraphs.
+  /* Add a delegated event handler to reveal the remaining paragraphs.
     When a .read-on link is clicked, we can:
     1. Prevent the defaul actionof a link.
     2. Reveal everything in that particular article now.
@@ -60,6 +81,25 @@ articleView.setTeasers = function() {
 
     // STRETCH GOAl!: change the 'Read On' link to 'Show Less'
   */
+  $('.read-on').on('click', function(){
+    event.preventDefault();
+    $(this).parent().find('*').fadeIn();
+    $(this).hide();
+    $(this).parent().find('.showLess').text('Show less <<');
+  });
+//show less
+  $('.showLess').on('click', function(){
+    event.preventDefault();
+    $(this).parent().find('*:nth-of-type(n+2)').hide();
+    $('.showLess').text();
+    $('.read-on').fadeIn();
+  });
 };
-
-// TODO: Invoke all of the above functions (I mean, methods!):
+$(document).ready (function() {
+  articleView.populateFilters();
+  articleView.handleCategoryFilter();
+  articleView.handleAuthorFilter();
+  articleView.handleMainNav();
+  articleView.setTeasers();
+});
+// Invoke all of the above functions (I mean, methods!):
