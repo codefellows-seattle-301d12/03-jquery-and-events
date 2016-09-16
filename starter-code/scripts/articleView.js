@@ -85,6 +85,14 @@ articleView.setTeasers = function() {
     event.preventDefault();
     $(this).parent().find('*').fadeIn();
     $(this).hide();
+    $(this).parent().find('.showLess').text('Show less <<');
+  });
+//show less
+  $('.showLess').on('click', function(){
+    event.preventDefault();
+    $(this).parent().find('*:nth-of-type(n+2)').hide();
+    $('.showLess').text();
+    $('.read-on').fadeIn();
   });
 };
 $(document).ready (function() {
